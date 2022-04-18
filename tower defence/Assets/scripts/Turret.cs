@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
+    [Header("Attributes")]
     public float range = 15f;
+    public float fireRate = 1f;
+    private float fireCountdown = 0f;
+
+    [Header("Unity setup fields")]
+    public string enemyTag = "Enemy";
+
+    public GameObject bulletPrefab;
+    public Transform firePoint;
 
 
 
@@ -36,6 +45,10 @@ public class Turret : MonoBehaviour
         {
             target = nearestEnemy.transform;
         }
+        else
+        {
+            target = null;
+        }
 
 
     }
@@ -50,7 +63,27 @@ public class Turret : MonoBehaviour
             return;
         }
 
+        // fireing
+        if ( fireCountdown <= 0f)
+        {
+            Shoot();
+            fireCountdown = 1f / fireRate;
+        }
 
+        fireCountdown -= Time.deltaTime;
+
+
+    }
+
+    void Shoot()
+    {
+        GameObject bulletGO = (GameObject)Instantiate (bulletPrefab, firePoint.position, firePoint.rotation);
+        Bullet bullet = bulletGO.GetComponent<Bullet>();
+
+        if (bullet != null)
+        {
+            bullet.Seek(target);
+        }
     }
 
     void OnDrawGizmosSelected()
