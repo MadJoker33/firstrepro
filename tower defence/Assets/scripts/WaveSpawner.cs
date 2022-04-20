@@ -8,6 +8,7 @@ public class WaveSpawner : MonoBehaviour
     public Transform enemyPrefab;
 
     public Transform spawnPoint;
+    public Transform spawnPoint2;
 
     public float timeBetweenWaves = 5f;
     private float countdown = 2f;
@@ -55,7 +56,7 @@ public class WaveSpawner : MonoBehaviour
     {
 
         Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-
+        Instantiate(enemyPrefab, spawnPoint2.position, spawnPoint2.rotation);
 
     }
 

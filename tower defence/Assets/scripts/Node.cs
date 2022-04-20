@@ -1,18 +1,85 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Node : MonoBehaviour
 {
+
+    public Color hoverColor;
+    public Vector3 positionOffset;
+
+    private GameObject turret;
+
+    private Renderer rend;
+    private Color startColor;
+
+    BuildManager buildManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        rend = GetComponent<Renderer>();
+        startColor = rend.material.color;
+
+        buildManager = BuildManager.instance;
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnMouseDown()
     {
-        
+
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        if (buildManager.GetTurretToBuild() == null)
+        {
+            return;
+        }
+
+        if (turret != null)
+        {
+            print("Cant build there! - TODO: Display on screen");
+            return;
+
+        }
+        // build turret
+        GameObject turretToBuild = buildManager.GetTurretToBuild();
+        turret = (GameObject)Instantiate(turretToBuild, transform.position + positionOffset, transform.rotation);
+
+
+
     }
+
+
+
+    void OnMouseEnter()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+
+
+        if (buildManager.GetTurretToBuild() == null)
+        {
+            return;
+        }
+
+        rend.material.color = hoverColor;
+    }
+
+    void OnMouseExit()
+    {
+        rend.material.color = startColor;
+
+    }
+
+
+
+
+
 }
